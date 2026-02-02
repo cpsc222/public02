@@ -1,0 +1,14 @@
+[Unit]
+Description=Python API Server
+After=network.target
+
+[Service]
+User=user
+Group=sudo
+WorkingDirectory=/home/user/cpsc222
+ExecStart=/home/user/cpsc222/venv/bin/python /home/user/cpsc222/api.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
