@@ -1,0 +1,37 @@
+server {
+    listen 80;
+    server_name 10.50.31.41;
+    location /api/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real_IP $remote_addr;
+        proxy_set_header Authorization $http_authorization;
+    }
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+#below https, above to match previous apiconf for port 80 function
+
+server {
+    listen 443 ssl;
+    server_name www.helloworld.com;
+    ssl_certificate /etc/nginx/ssl/nginx.crt;
+    ssl_certificate_key /etc/nginx/ssl/nginx.key;
+    root /home/user/cpsc222/public01/site;
+    index index.php index.html;
+    location / {
+        try_files $uri $uri/ =404;
+}
+    location /api/ {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Authorization $http_authorization;
+    }
+    location ~ \.php$ {
+            include snippets/fastcgi-php.conf;
+            fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    }
+}
