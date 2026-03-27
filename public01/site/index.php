@@ -1,48 +1,42 @@
 <?php
-$name = "Bob man";
-$hoursworked = 40.0;
-$payrate = 54.50;
-$federalrate = 24.5;
-$staterate = 3.07 ; //PA income tax in 2025 for reference
-$gross = $hoursworked * $payrate;
-$fedwithold = $gross * ($federalrate / 100);
-$statewithold = $gross * ($staterate / 100);
-$totaldeduct = $fedwithold + $statewithold;
-$net = $gross - $totaldeduct;
-$annual = $gross * 52;
-
-if ($annual <= 11925) {
- $fedbrack = "10%";
-}
-elseif ($annual <= 48475){
- $fedbrack = "12%";
-}
-elseif ($annual <= 103350){
- $fedbrack = "22%";
-}
-elseif ($annual <= 197300){
- $fedbrack = "24%";
-}
-elseif ($annual <= 250525){
- $fedbrack = "32%";
-}
-elseif ($annual <= 626350){
- $fedbrack = "35%";
-}
-else {$fedbrack = "37%";}
-
-$Payrolltable = array(
-"Employee name" => $name,
-"hours worked" => number_format($hoursworked, 1),
-"pay rate" => "$" . number_format($payrate, 2),
-"gross pay" => "$" . number_format($gross, 2),
-"federal witholding (" . $federalrate . "%)" => "$" . number_format($fedwithold, 2),
-"PA witholding (" . $staterate . "%)" => "$" . number_format($statewithold, 2),
-"total deductions" => "$" . number_format($totaldeduct, 2),
-"net pay" => "$" . number_format($net, 2),
-"annual gross pay" => "$" . number_format($annual, 2),
-"2025 federal tax bracket" => $fedbrack
+	require_once "student.php";
+	require_once "grades.php";
+	$students = array();
+	$students[] = new Student(
+	"Man",
+	"bob",
+	"123",
+	array(
+	"cpsc222" => 93,
+	"cpsc428" => 89,
+	"math101" => 90
+	)
 );
+
+	$students[] = new Student(
+	"Rosh",
+	"Max",
+	"456",
+	array(
+	"cpsc222" => "80",
+	"cpsc428" => "98",
+	"math101" => "90"
+	)
+);
+
+       $students[] = new Student( 
+        "Wasd",
+        "mac",
+        "789",
+        array( 
+        "cpsc222" => "95",
+        "cpsc428" => "75",
+        "math101" => "80"
+        )
+);
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -53,20 +47,36 @@ $Payrolltable = array(
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width" />
 		<!--<link rel="stylesheet" src="styles.css" />-->
-	<title>tax calculator</title>
+	<title>grades</title>
 	</head>
 	<body>
-	<h1>tax calc</h1>
+	<h1>grade tables</h1>
 	<?php
-		echo "<table border=1>";
-		echo "<tr><th>Item</th><th>value</th></tr>";
-		foreach ($Payrolltable as $label => $value) {
-			echo "<tr>";
-			echo "<td>" . $label . "</td>";
-			echo "<td>" . $value . "</td>";
-			echo "</tr>";
+	 for ($x=0; $x < count($students); $x++){
+		$student = $students[$x];
+		echo "<table border='1'>";
+		echo "<tr><th colspan='2'>Student " . ($x + 1) . "</th></tr>";
+		echo "<tr>";
+		echo "<td>name</td>";
+		echo "<td>" . $student->getlname() . ", " . $student->getfname() . "</td>";
+		echo "</tr>";
+
+		echo "<tr>";
+		echo "<td>student id</td>";
+		echo "<td>" . $student->getid() . "</td>";
+		echo "</tr>";
+
+		echo "<tr>";
+		echo "<td>courses</td>";
+		echo "<td>";
+		foreach ($student->getCourses() as $courses => $grade) {
+			echo $courses . " : " . $grade . "% " . getgrade($grade) . "<br>";
 		}
+		echo "</td>";
+		echo "</tr>";
+
 		echo "</table>";
+	}
 	?>
 	</body>
 	</html>
