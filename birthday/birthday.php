@@ -51,7 +51,7 @@ if (isset($_GET['year'])) {
 }
 ?>
 	</p>
-	<form method="POST" action="index.php">
+	<form method="POST" action="birthday.php">
 		<br/>
 		<table>
 		<?php 
