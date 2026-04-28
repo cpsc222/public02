@@ -113,19 +113,24 @@ echo "<table border='1'><tr>
 <th>message</th>
 </tr>";
 
-foreach (file('/home/user/syslog.txt')as $line){
-$parts = preg_split('/\s+/', trim($line), 5);
-if (count($parts) < 5) continue;
-$date = $parts[0];
-$host = $parts[1];
-$app = rtrim($parts[2], ':') . " " . rtrim($parts[3], ':');
-$msg = $parts[4];
-echo "<tr>
-<td>$date</td>
-<td>$host</td>
-<td>$app</td>
-<td>$msg</td>
-</tr>";
+foreach (file('/home/user/syslog.txt') as $line) {
+    $line = trim($line);
+    $parts = preg_split('/\s+/', $line, 3);
+    if (count($parts) < 3) continue;
+    $date = $parts[0];
+    $host = $parts[1];
+    $rest = $parts[2];
+    $app_msg = preg_split('/:/', $rest, 2);
+    
+    if (count($app_msg) < 2) continue;
+    $app = $app_msg[0];             
+    $msg = trim($app_msg[1]);       
+    echo "<tr>
+    <td>$date</td>
+    <td>$host</td>
+    <td>$app</td>
+    <td>$msg</td>
+    </tr>";
 }
 echo "</table>";
 }
